@@ -1,5 +1,6 @@
 package com.mancj.example;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
@@ -19,6 +21,13 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MaterialSearchBar.OnSearchActionListener {
     MaterialSearchBar searchBar;
     private DrawerLayout drawer;
+
+    public void jumpToMap(View view)
+    {
+        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
