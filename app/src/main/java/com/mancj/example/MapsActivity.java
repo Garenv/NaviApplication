@@ -27,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -215,8 +216,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 latitude = lastKnownLocation.getLatitude();
                 longitude = lastKnownLocation.getLongitude();
                 mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(myHome).title("My Home"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myHome, 15));
+
+                mMap.setMyLocationEnabled(true);
+
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(latitude, longitude))
+                        .zoom(17)
+                        .bearing(0)
+                        .tilt(30)
+                        .build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
+
+                //mMap.addMarker(new MarkerOptions().position(myHome).title("My Home"));
+                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myHome, 15));
             }
         }
 

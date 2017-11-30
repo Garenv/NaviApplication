@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity
     public void jumpToMap(View view)
     {
         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-
         startActivity(intent);
     }
 
