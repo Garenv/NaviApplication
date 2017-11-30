@@ -1,5 +1,4 @@
 package com.mancj.materialsearchbar;
-
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
