@@ -52,6 +52,7 @@
                 android:layout_toRightOf="@+id/mt_nav"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
+                android:hint="Search for a store"
                 android:maxLines="1"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/searchBarPlaceholderColor"

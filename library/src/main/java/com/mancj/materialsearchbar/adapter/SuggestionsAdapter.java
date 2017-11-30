@@ -10,15 +10,7 @@ import android.widget.Filterable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mancj on 27.01.17.
- */
 
-/**
- * Create this adapter to customize the suggestions list of the MaterialSearchBar
- * @param <S> type of your suggestions model
- * @param <V> viewholder
- */
 public abstract class SuggestionsAdapter<S, V extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<V> implements Filterable {
 
     protected List<S> suggestions = new ArrayList<>();

@@ -9,10 +9,6 @@ import android.widget.TextView;
 
 import com.mancj.materialsearchbar.R;
 
-/**
- * Created by mancj on 27.01.17.
- */
-
 public class DefaultSuggestionsAdapter extends SuggestionsAdapter<String, DefaultSuggestionsAdapter.SuggestionHolder> {
     private SuggestionsAdapter.OnItemViewClickListener listener;
 

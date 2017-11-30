@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MaterialSearchBar.OnSearchActionListener {
     MaterialSearchBar searchBar;
@@ -30,8 +31,7 @@ public class MainActivity extends AppCompatActivity
         searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         searchBar.setOnSearchActionListener(this);
         searchBar.inflateMenu(R.menu.main);
-        searchBar.setText("Hello World!");
-        Log.d("LOG_TAG", getClass().getSimpleName() + ": text " + searchBar.getText());
+//        Log.d("LOG_TAG", getClass().getSimpleName() + ": text " + searchBar.getText());
         searchBar.setCardViewElevation(10);
         searchBar.addTextChangeListener(new TextWatcher() {
             @Override

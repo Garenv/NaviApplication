@@ -28,7 +28,7 @@
         style="@style/MaterialSearchBarLight"
         android:id="@+id/searchBar"
         app:mt_navIconEnabled="true"
-        app:mt_placeholder="Google Play"
+        app:mt_placeholder="Search..."
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
