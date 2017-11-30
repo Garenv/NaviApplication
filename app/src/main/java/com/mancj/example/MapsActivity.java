@@ -124,15 +124,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+        else {
+            mMap.setMyLocationEnabled(true);
+        }
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
 
                 LatLng myHome = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(myHome).title("My Home"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myHome, 15));
+
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(latitude, longitude))
+                        .zoom(17)
+                        .bearing(0)
+                        .tilt(30)
+                        .build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
 
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
 
@@ -215,7 +227,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng myHome = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
                 latitude = lastKnownLocation.getLatitude();
                 longitude = lastKnownLocation.getLongitude();
-                mMap.clear();
 
                 mMap.setMyLocationEnabled(true);
 
