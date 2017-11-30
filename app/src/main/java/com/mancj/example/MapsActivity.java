@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -68,6 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         if (!CheckGooglePlayServices()) {
             Log.d("onCreate", "Finishing test case since Google Play Services are not available");
@@ -143,7 +145,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .bearing(0)
                         .tilt(30)
                         .build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                //mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
 
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
@@ -182,7 +184,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             address += listAddresses.get(0).getCountryName();
                         }
 
-                        Toast.makeText(MapsActivity.this, address, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MapsActivity.this, address, Toast.LENGTH_SHORT).show();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
