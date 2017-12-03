@@ -11,13 +11,22 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,21 +39,41 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback{
 
     private GoogleMap mMap;
-    GoogleApiClient mGoogleApiClient;
-    Button btnRestaurant;
     double latitude;
     double longitude;
 
     LocationManager locationManager;
     LocationListener locationListener;
+
+    public void onSearch(View view)
+    {
+        EditText searchBar = (EditText) findViewById(R.id.searchBar);
+        String searchWord = searchBar.getText().toString();
+        mMap.clear();
+        ShowCurrentLocation();
+        Search(searchWord);
+    }
+
+    void Search(String searchWord)
+    {
+        Log.d("onClick", "Button is Clicked");
+        String url = getUrl(latitude,longitude, searchWord);
+        Object[] DataTransfer = new Object[2];
+        DataTransfer[0] = mMap;
+        DataTransfer[1] = url;
+        Log.d("onClick", url);
+        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+        getNearbyPlacesData.execute(DataTransfer);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -111,19 +140,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlacesUrl.append("location=" + latitude + "," + longitude);
-        googlePlacesUrl.append("&radius=" + 1000);
-        googlePlacesUrl.append("&type=" + nearbyPlace);
+        googlePlacesUrl.append("&radius=" + 5000);
+        googlePlacesUrl.append("&keyword=" + nearbyPlace);
         googlePlacesUrl.append("&sensor=true");
         googlePlacesUrl.append("&key=" + "AIzaSyB-NxV8HRooQLcW57Es1ahOs78J83oqICs");
         Log.d("getUrl", googlePlacesUrl.toString());
         return (googlePlacesUrl.toString());
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+    void ShowCurrentLocation()
+    {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -131,20 +157,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         else {
             mMap.setMyLocationEnabled(true);
         }
+    }
+
+    void UpdateMyLocation()
+    {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+        else
+        {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+            Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            ShowCurrentLocation();
+            latitude = lastKnownLocation.getLatitude();
+            longitude = lastKnownLocation.getLongitude();
+
+            mMap.setMyLocationEnabled(true);
+
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
 
-                LatLng myHome = new LatLng(location.getLatitude(), location.getLongitude());
-
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(new LatLng(latitude, longitude))
-                        .zoom(17)
-                        .bearing(0)
-                        .tilt(30)
-                        .build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
+                UpdateMyLocation();
 
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
 
@@ -181,8 +225,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         {
                             address += listAddresses.get(0).getCountryName();
                         }
-
-                        Toast.makeText(MapsActivity.this, address, Toast.LENGTH_SHORT).show();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -223,8 +265,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
                 Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                LatLng myHome = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                ShowCurrentLocation();
                 latitude = lastKnownLocation.getLatitude();
                 longitude = lastKnownLocation.getLongitude();
 
@@ -239,28 +280,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
 
-
-                //mMap.addMarker(new MarkerOptions().position(myHome).title("My Home"));
-                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myHome, 15));
             }
         }
 
-        btnRestaurant = (Button) findViewById(R.id.btnRestaurant);
-        btnRestaurant.setOnClickListener(new View.OnClickListener() {
-            String Restaurant = "restaurant";
-            @Override
-            public void onClick(View v) {
-                Log.d("onClick", "Button is Clicked");
-                mMap.clear();
-                String url = getUrl(40.73739,-73.82248, Restaurant);
-                Object[] DataTransfer = new Object[2];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                Log.d("onClick", url);
-                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(DataTransfer);
-                Toast.makeText(MapsActivity.this,"Nearby Restaurants", Toast.LENGTH_LONG).show();
-            }
-        });
     }
+
 }
