@@ -25,6 +25,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -97,6 +98,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         if (!CheckGooglePlayServices()) {
             Log.d("onCreate", "Finishing test case since Google Play Services are not available");
@@ -175,7 +177,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             longitude = lastKnownLocation.getLongitude();
 
             mMap.setMyLocationEnabled(true);
-
         }
     }
 
@@ -189,6 +190,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onLocationChanged(Location location) {
 
                 UpdateMyLocation();
+
 
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
 
