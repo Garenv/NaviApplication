@@ -21,13 +21,18 @@ public class MainActivity extends AppCompatActivity{
     public void jumpToMap(View view)
     {
         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+
         startActivity(intent);
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
     }
+    
 
 }
