@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/MaterialSearchBar.iml" filepath="$PROJECT_DIR$/MaterialSearchBar.iml" />
       <module fileurl="file://C:\Users\huika\AndroidStudioProjects\NaviApplication\MaterialSearchBar.iml" filepath="C:\Users\huika\AndroidStudioProjects\NaviApplication\MaterialSearchBar.iml" />
       <module fileurl="file://$PROJECT_DIR$/NaviApplication.iml" filepath="$PROJECT_DIR$/NaviApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
