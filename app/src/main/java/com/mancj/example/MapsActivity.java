@@ -40,6 +40,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
@@ -332,11 +333,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
                 mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                    Marker marker;
                     public void onCameraChange(CameraPosition arg0) {
-                        mMap.clear();
+                        if(marker!=null){
+                            marker.remove();
+                        }
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-                        mMap.addMarker(markerOptions.position(arg0.target));
+                        marker = mMap.addMarker(markerOptions.position(arg0.target));
                     }
                 });
             }
