@@ -55,27 +55,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationManager locationManager;
     LocationListener locationListener;
 
-    boolean freeSearchOn;
-
     public void onSearch(View view)
-    {
-        mMap.clear();
-        ShowCurrentLocation();
-        UpdateMyLocation();
-        if(freeSearchOn == false) {
-            Search(getSearchWord());
-        }
-        else
-        {
-            //ADD STEVEN SEARCH FUNCTION HERE
-        }
-    }
-
-    String getSearchWord()
     {
         EditText searchBar = (EditText) findViewById(R.id.searchBar);
         String searchWord = searchBar.getText().toString();
-        return searchWord;
+        mMap.clear();
+        ShowCurrentLocation();
+        Search(searchWord);
     }
 
     void Search(String searchWord)
@@ -89,36 +75,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
         getNearbyPlacesData.execute(DataTransfer);
     }
-
-    //FOR STEVEN USE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public void ChangeLocationMode()
-    {
-        //What happens when you click the free search button
-        freeSearchOn = !freeSearchOn;
-    }
-
-    void Search(double latitude, double longitude, String searchWord)
-    {
-        Log.d("onClick", "Button is Clicked");
-        String url = getUrl(latitude,longitude, searchWord);
-        Object[] DataTransfer = new Object[2];
-        DataTransfer[0] = mMap;
-        DataTransfer[1] = url;
-        Log.d("onClick", url);
-        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-        getNearbyPlacesData.execute(DataTransfer);
-    }
-
-    void OnPurpleDotLocationChange()
-    {
-        //Search
-        //Update info
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -323,9 +279,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .bearing(0)
                         .tilt(30)
                         .build();
-
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
             }
         }
+
     }
+
 }
