@@ -285,9 +285,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                     Marker marker;
                     public void onCameraChange(CameraPosition arg0) {
+
                         if(marker!=null){
                             marker.remove();
                         }
+
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
                         marker = mMap.addMarker(markerOptions.position(arg0.target));
