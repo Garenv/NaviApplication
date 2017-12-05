@@ -44,16 +44,16 @@ public class MainActivity extends AppCompatActivity{
 
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference();
 
-        Map<String, String> values = new HashMap<>();
+        /*Map<String, String> values = new HashMap<>();
 
         values.put("name", "Steven");
         values.put("name", "Ken");
         //values.put("name", "Garen");
 
 
-        //save to the database
 
-        dbref.push().setValue(values, new DatabaseReference.CompletionListener() {
+        //save to the database
+dbref.push().setValue(values, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity{
                     Log.i("Info", "Save failed");
                 }
             }
-        });
+        });*/
     }
 
 
