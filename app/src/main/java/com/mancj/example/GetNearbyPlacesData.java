@@ -88,14 +88,9 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
             values = nearbyPlacesList.get(i);
 
             //an if statement should encapsulate the creation of new entry store
-            if(values.get("vicinity") !=  myRootDBref.child(values.get("vicinity")).getKey() )
-                if(values.get("place_name") != myRootDBref.child(values.get("vicinity")).child(values.get("place_name")).getKey())
-                    myRootDBref.child(values.get("vicinity")).child(values.get("place_name")).push().setValue(waittime);
-            else
-                    myRootDBref.child(values.get("vicinity")).child(values.get("place_name")).push().setValue(waittime);
-
-
-
+            //if(values.get("vicinity") !=  myRootDBref.child(values.get("vicinity")).getKey() )
+              //  if(values.get("place_name") != myRootDBref.child(values.get("vicinity")).child(values.get("place_name")).getKey())
+                    myRootDBref.child(values.get("place_name")).child(values.get("vicinity")).child("10").child("waitime").push().setValue(waittime);
         }
 
     };
