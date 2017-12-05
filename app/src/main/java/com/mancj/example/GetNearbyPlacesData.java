@@ -12,9 +12,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
@@ -56,10 +59,38 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
         nearbyPlacesList =  dataParser.parse(result);
 
+        saveNearbyPlaces(nearbyPlacesList);
+
         ShowNearbyPlaces(nearbyPlacesList);
 
         Log.d("GooglePlacesReadTask", "onPostExecute Exit");
     }
+
+    private void saveNearbyPlaces(List<HashMap<String, String>> nearbyPlacesList){
+
+        for (int i = 0; i < nearbyPlacesList.size(); i++){
+
+            Log.d("onPostExecute","Saving location " + i );
+
+            DatabaseReference myRootDBref = FirebaseDatabase.getInstance().getReference();
+
+            Map<String, String> values = new HashMap<>();
+
+            Map<String, String> waittime = new HashMap<>();
+
+            //dummy waittime
+            waittime.put("Waittime" , "10" );
+
+            values = nearbyPlacesList.get(i);
+
+            //an if statement should encapsulate the creation of new entry store
+            myRootDBref.child(values.get("vicinity")).child(values.get("place_name")).push().setValue(waittime);
+
+
+
+        }
+
+    };
 
     private void ShowNearbyPlaces(List<HashMap<String, String>> nearbyPlacesList) {
 
@@ -83,6 +114,7 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
             markerOptions.position(latLng);
 
+            //The wait time will need to go inside parenthesis
             markerOptions.title(placeName + " : " + vicinity);
 
 
