@@ -40,33 +40,6 @@ public class MainActivity extends AppCompatActivity{
 
         setContentView(R.layout.activity_main);
 
-
-
-        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference();
-
-        /*Map<String, String> values = new HashMap<>();
-
-        values.put("name", "Steven");
-        values.put("name", "Ken");
-        //values.put("name", "Garen");
-
-
-
-        //save to the database
-dbref.push().setValue(values, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-
-                if (databaseError == null) {
-
-                    Log.i("Info", "Save Successful");
-
-                } else {
-
-                    Log.i("Info", "Save failed");
-                }
-            }
-        });*/
     }
 
 
