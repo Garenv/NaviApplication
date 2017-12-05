@@ -91,6 +91,8 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
             if(values.get("vicinity") !=  myRootDBref.child(values.get("vicinity")).getKey() )
                 if(values.get("place_name") != myRootDBref.child(values.get("vicinity")).child(values.get("place_name")).getKey())
                     myRootDBref.child(values.get("vicinity")).child(values.get("place_name")).push().setValue(waittime);
+            else
+                    myRootDBref.child(values.get("vicinity")).child(values.get("place_name")).push().setValue(waittime);
 
 
 
