@@ -12,6 +12,12 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import android.view.WindowManager;
+
+import com.mancj.materialsearchbar.MaterialSearchBar;
+
+
 import java.sql.DatabaseMetaData;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +27,7 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 
 public class MainActivity extends AppCompatActivity{
