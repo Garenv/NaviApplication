@@ -37,8 +37,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
@@ -275,7 +277,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 longitude = lastKnownLocation.getLongitude();
 
                 mMap.setMyLocationEnabled(true);
-
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(new LatLng(latitude, longitude))
                         .zoom(17)
@@ -284,7 +285,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+                mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                    Marker marker;
+                    public void onCameraChange(CameraPosition arg0) {
 
+                        if(marker!=null){
+                            marker.remove();
+                        }
+
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                        marker = mMap.addMarker(markerOptions.position(arg0.target));
+                    }
+                });
             }
         }
     }
