@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -62,6 +63,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.clear();
         ShowCurrentLocation();
         Search(searchWord);
+
+
+        // Closes the keyboard when the button is pressed - Garen
+        View view1 = this.getCurrentFocus();
+        if (view1 != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+
     }
 
     void Search(String searchWord)
@@ -92,7 +103,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
