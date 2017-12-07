@@ -67,8 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String searchWord = searchBar.getText().toString();
         mMap.clear();
         ShowCurrentLocation();
-        if(switchOn)
-        {
+        if(switchOn){
             Search(purpleMarker.getPosition().latitude, purpleMarker.getPosition().longitude, searchWord);
         }
         else {
