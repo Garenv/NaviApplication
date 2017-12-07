@@ -70,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(switchOn){
             Search(purpleMarker.getPosition().latitude, purpleMarker.getPosition().longitude, searchWord);
         }
+
         else {
             Search(searchWord);
         }
