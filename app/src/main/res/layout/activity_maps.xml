@@ -22,7 +22,15 @@
             android:onClick="onSearch"
             android:text="SEARCH" />
 
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/Switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onSwitch"
+        android:text="Switch" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
