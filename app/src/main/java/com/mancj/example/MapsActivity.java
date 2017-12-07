@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -57,43 +58,72 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationManager locationManager;
     LocationListener locationListener;
 
+    boolean switchOn;
+    Marker purpleMarker;
+
     public void onSearch(View view)
     {
-
         EditText searchBar = (EditText) findViewById(R.id.searchBar);
-
         String searchWord = searchBar.getText().toString();
-
         mMap.clear();
-
         ShowCurrentLocation();
+        if(switchOn)
+        {
+            Search(purpleMarker.getPosition().latitude, purpleMarker.getPosition().longitude, searchWord);
+        }
+        else {
+            Search(searchWord);
+        }
 
-        Search(searchWord);
+        InputMethodManager inputManager =
+                (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(
+                this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    public void onSwitch(View view)
+    {
+        switchOn = !switchOn;
+
+        if(switchOn){
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+            LatLng newLatLng = new LatLng(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude);
+            purpleMarker = mMap.addMarker(markerOptions.position(newLatLng));
+        }
+        else{
+            if (purpleMarker != null) {
+                purpleMarker.remove();
+            }                            }
     }
 
     void Search(String searchWord)
     {
-
         Log.d("onClick", "Button is Clicked");
-
         String url = getUrl(latitude,longitude, searchWord);
-
         Object[] DataTransfer = new Object[2];
-
         DataTransfer[0] = mMap;
-
         DataTransfer[1] = url;
-
         Log.d("onClick", url);
-
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+        getNearbyPlacesData.execute(DataTransfer);
+    }
 
+    void Search(double lat, double lng, String searchWord)
+    {
+        Log.d("onClick", "Button is Clicked");
+        String url = getUrl(lat,lng, searchWord);
+        Object[] DataTransfer = new Object[2];
+        DataTransfer[0] = mMap;
+        DataTransfer[1] = url;
+        Log.d("onClick", url);
+        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
         getNearbyPlacesData.execute(DataTransfer);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if(requestCode == 1)
@@ -112,47 +142,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_maps);
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-
         if (!CheckGooglePlayServices()) {
-
             Log.d("onCreate", "Finishing test case since Google Play Services are not available");
-
             finish();
-
         }     else {
-
-                Log.d("onCreate","Google Play Services available.");
+            Log.d("onCreate","Google Play Services available.");
         }
 
         //Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-
         mapFragment.getMapAsync(this);
-
-        //  Makes sure the keyboard only pops up when a user clicks the search bar -Garen
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     private boolean CheckGooglePlayServices() {
-
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-
         int result = googleAPI.isGooglePlayServicesAvailable(this);
-
         if(result != ConnectionResult.SUCCESS) {
-
             if(googleAPI.isUserResolvableError(result)) {
-
                 googleAPI.getErrorDialog(this, result,
-
                         0).show();
             }
             return false;
@@ -174,23 +186,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //Google api credentials
     private String getUrl(double latitude, double longitude, String nearbyPlace) {
 
-
         StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-
         googlePlacesUrl.append("location=" + latitude + "," + longitude);
-
         googlePlacesUrl.append("&radius=" + 5000);
-
         googlePlacesUrl.append("&keyword=" + nearbyPlace);
-
         googlePlacesUrl.append("&sensor=true");
-
         googlePlacesUrl.append("&key=" + "AIzaSyB-NxV8HRooQLcW57Es1ahOs78J83oqICs");
-
         Log.d("getUrl", googlePlacesUrl.toString());
-
         return (googlePlacesUrl.toString());
-
     }
 
     void ShowCurrentLocation()
@@ -214,13 +217,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
-
             Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
             ShowCurrentLocation();
-
             latitude = lastKnownLocation.getLatitude();
-
             longitude = lastKnownLocation.getLongitude();
 
             mMap.setMyLocationEnabled(true);
@@ -229,11 +228,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -278,7 +275,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     }
                 } catch (IOException e) {
-
                     e.printStackTrace();
                 }
 
@@ -303,7 +299,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(Build.VERSION.SDK_INT < 23)
         {
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             }
         }
@@ -317,13 +312,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
-
                 Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
                 ShowCurrentLocation();
-
                 latitude = lastKnownLocation.getLatitude();
-
                 longitude = lastKnownLocation.getLongitude();
 
                 mMap.setMyLocationEnabled(true);
@@ -335,21 +326,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-                mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                    Marker marker;
-                    public void onCameraChange(CameraPosition arg0) {
 
-                        if(marker!=null){
-                            marker.remove();
+                    mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+
+                        public void onCameraChange(CameraPosition arg0) {
+                            if(switchOn){
+                                MarkerOptions markerOptions = new MarkerOptions();
+                                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                                //purpleMarker = mMap.addMarker(markerOptions.position(arg0.target));
+                                purpleMarker.setPosition(arg0.target);
+                            }
                         }
+                    });
 
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-                        marker = mMap.addMarker(markerOptions.position(arg0.target));
-                    }
-                });
             }
         }
+
     }
 
 }
