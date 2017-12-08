@@ -38,10 +38,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
@@ -58,62 +56,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationManager locationManager;
     LocationListener locationListener;
 
-    boolean switchOn;
-    Marker purpleMarker;
-
     public void onSearch(View view)
     {
         EditText searchBar = (EditText) findViewById(R.id.searchBar);
         String searchWord = searchBar.getText().toString();
         mMap.clear();
         ShowCurrentLocation();
-        if(switchOn){
-            Search(purpleMarker.getPosition().latitude, purpleMarker.getPosition().longitude, searchWord);
+        Search(searchWord);
+
+
+        // Closes the keyboard when the button is pressed - Garen
+        View view1 = this.getCurrentFocus();
+        if (view1 != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
-        else {
-            Search(searchWord);
-        }
 
-        InputMethodManager inputManager =
-                (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(
-                this.getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
-    }
-
-    public void onSwitch(View view)
-    {
-        switchOn = !switchOn;
-
-        if(switchOn){
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-            LatLng newLatLng = new LatLng(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude);
-            purpleMarker = mMap.addMarker(markerOptions.position(newLatLng));
-        }
-        else{
-            if (purpleMarker != null) {
-                purpleMarker.remove();
-            }                            }
     }
 
     void Search(String searchWord)
     {
         Log.d("onClick", "Button is Clicked");
         String url = getUrl(latitude,longitude, searchWord);
-        Object[] DataTransfer = new Object[2];
-        DataTransfer[0] = mMap;
-        DataTransfer[1] = url;
-        Log.d("onClick", url);
-        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-        getNearbyPlacesData.execute(DataTransfer);
-    }
-
-    void Search(double lat, double lng, String searchWord)
-    {
-        Log.d("onClick", "Button is Clicked");
-        String url = getUrl(lat,lng, searchWord);
         Object[] DataTransfer = new Object[2];
         DataTransfer[0] = mMap;
         DataTransfer[1] = url;
@@ -138,7 +103,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -321,6 +285,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 longitude = lastKnownLocation.getLongitude();
 
                 mMap.setMyLocationEnabled(true);
+
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(new LatLng(latitude, longitude))
                         .zoom(17)
@@ -329,18 +294,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-
-                    mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-
-                        public void onCameraChange(CameraPosition arg0) {
-                            if(switchOn){
-                                MarkerOptions markerOptions = new MarkerOptions();
-                                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-                                //purpleMarker = mMap.addMarker(markerOptions.position(arg0.target));
-                                purpleMarker.setPosition(arg0.target);
-                            }
-                        }
-                    });
 
             }
         }
