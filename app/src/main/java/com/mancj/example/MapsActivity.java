@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -57,19 +58,62 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationManager locationManager;
     LocationListener locationListener;
 
+    boolean switchOn;
+    Marker purpleMarker;
+
     public void onSearch(View view)
     {
         EditText searchBar = (EditText) findViewById(R.id.searchBar);
         String searchWord = searchBar.getText().toString();
         mMap.clear();
         ShowCurrentLocation();
-        Search(searchWord);
+        if(switchOn){
+            Search(purpleMarker.getPosition().latitude, purpleMarker.getPosition().longitude, searchWord);
+        }
+
+        else {
+            Search(searchWord);
+        }
+
+        InputMethodManager inputManager =
+                (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(
+                this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    public void onSwitch(View view)
+    {
+        switchOn = !switchOn;
+
+        if(switchOn){
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+            LatLng newLatLng = new LatLng(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude);
+            purpleMarker = mMap.addMarker(markerOptions.position(newLatLng));
+        }
+        else{
+            if (purpleMarker != null) {
+                purpleMarker.remove();
+            }                            }
     }
 
     void Search(String searchWord)
     {
         Log.d("onClick", "Button is Clicked");
         String url = getUrl(latitude,longitude, searchWord);
+        Object[] DataTransfer = new Object[2];
+        DataTransfer[0] = mMap;
+        DataTransfer[1] = url;
+        Log.d("onClick", url);
+        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+        getNearbyPlacesData.execute(DataTransfer);
+    }
+
+    void Search(double lat, double lng, String searchWord)
+    {
+        Log.d("onClick", "Button is Clicked");
+        String url = getUrl(lat,lng, searchWord);
         Object[] DataTransfer = new Object[2];
         DataTransfer[0] = mMap;
         DataTransfer[1] = url;
@@ -285,19 +329,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-                mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                    Marker marker;
-                    public void onCameraChange(CameraPosition arg0) {
 
-                        if(marker!=null){
-                            marker.remove();
+                    mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+
+                        public void onCameraChange(CameraPosition arg0) {
+                            if(switchOn){
+                                MarkerOptions markerOptions = new MarkerOptions();
+                                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                                //purpleMarker = mMap.addMarker(markerOptions.position(arg0.target));
+                                purpleMarker.setPosition(arg0.target);
+                            }
                         }
+                    });
 
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-                        marker = mMap.addMarker(markerOptions.position(arg0.target));
-                    }
-                });
             }
         }
     }
