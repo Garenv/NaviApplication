@@ -60,7 +60,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="480dp"
-        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -71,31 +71,31 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/button2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:background="#42f44e"
-                android:text="Dunkin Donuts    Wait Time: 7 min" />
+                android:text="Dunkin Donuts    Wait Time: 7 min"
+                android:id="@+id/button2" />
 
             <Button
-                android:id="@+id/button3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:background="#f44245"
-                android:text="GameStop     Wait Time: 2 min" />
+                android:text="GameStop     Wait Time: 2 min"
+                android:id="@+id/button3" />
 
             <Button
-                android:id="@+id/button4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:background="#41e2f4"
-                android:text="Best Buy     Wait Time: 5 min" />
+                android:text="Best Buy     Wait Time: 5 min"
+                android:id="@+id/button4"/>
         </LinearLayout>
 
     </ScrollView>
