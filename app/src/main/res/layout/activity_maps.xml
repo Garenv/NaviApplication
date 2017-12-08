@@ -38,10 +38,10 @@
 
 
         <EditText
-            android:hint="Search"
             android:id="@+id/searchBar"
             android:layout_width="289dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="Search" />
 
         <Button
             android:id="@+id/searchButton"
@@ -55,12 +55,11 @@
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="480dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,34 +68,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/scrollView2"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/scrollView2"
+            android:layout_marginBottom="12dp"
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/button2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:background="#42f44e"
-                android:text="Dunkin Donuts    Wait Time: 7 min"
-                android:id="@+id/button2" />
+                android:text="Dunkin Donuts    Wait Time: 7 min" />
 
             <Button
+                android:id="@+id/button3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:background="#f44245"
-                android:text="GameStop     Wait Time: 2 min"
-                android:id="@+id/button3" />
+                android:text="GameStop     Wait Time: 2 min" />
 
             <Button
+                android:id="@+id/button4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:background="#41e2f4"
-                android:text="Best Buy     Wait Time: 5 min"
-                android:id="@+id/button4"/>
+                android:text="Best Buy     Wait Time: 5 min" />
         </LinearLayout>
 
     </ScrollView>
