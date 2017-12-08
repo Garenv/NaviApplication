@@ -97,6 +97,7 @@
                 android:background="#41e2f4"
                 android:text="Best Buy     Wait Time: 5 min" />
         </LinearLayout>
+
     </ScrollView>
 
 </RelativeLayout>
