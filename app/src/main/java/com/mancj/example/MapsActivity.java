@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -27,8 +28,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -46,10 +49,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback{
+
+    public static MapsActivity singleton;
 
     private GoogleMap mMap;
     double latitude;
@@ -60,6 +67,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     boolean switchOn;
     Marker purpleMarker;
+
+    //ListView Stuff
+    ListView listView;
+    ArrayList<String> arrayList;
+    ArrayAdapter<String> adapter;
 
     public void onSearch(View view)
     {
@@ -108,6 +120,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.d("onClick", url);
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
         getNearbyPlacesData.execute(DataTransfer);
+        listView.setBackgroundColor(Color.WHITE);
+        arrayList.clear();
     }
 
     void Search(double lat, double lng, String searchWord)
@@ -120,6 +134,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.d("onClick", url);
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
         getNearbyPlacesData.execute(DataTransfer);
+    }
+
+    public void AddToList(String place_and_vicinity)
+    {
+        arrayList.add(place_and_vicinity);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -157,6 +177,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //  Makes sure the keyboard only pops up when a user clicks the search bar -Garen
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        singleton = this;
+
+        listView = (ListView) findViewById(R.id.listView);
+        arrayList = new ArrayList<String>();
+        adapter = new ArrayAdapter<String>(MapsActivity.this, android.R.layout.simple_list_item_1, arrayList);
+        listView.setAdapter(adapter);
     }
 
     private boolean CheckGooglePlayServices() {
@@ -341,7 +371,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         }
-
     }
 
 }

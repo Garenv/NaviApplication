@@ -54,54 +54,13 @@
 
     </LinearLayout>
 
-    <ScrollView
-        android:id="@+id/scrollView2"
+    <ListView
+        android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/scrollView2"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/scrollView2"
-            android:layout_marginBottom="12dp"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:background="#42f44e"
-                android:text="Dunkin Donuts    Wait Time: 7 min" />
-
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:background="#f44245"
-                android:text="GameStop     Wait Time: 2 min" />
-
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:background="#41e2f4"
-                android:text="Best Buy     Wait Time: 5 min" />
-        </LinearLayout>
-
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/Switch"
+        android:layout_marginTop="293dp" />
 
 </RelativeLayout>

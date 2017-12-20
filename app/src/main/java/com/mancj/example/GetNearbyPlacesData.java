@@ -29,6 +29,8 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
     GoogleMap mMap;
     String url;
 
+    public List<HashMap<String, String>> nearbyPlacesList;
+
     @Override
     protected String doInBackground(Object... params) {
         try {
@@ -57,7 +59,7 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
         Log.d("GooglePlacesReadTask", "onPostExecute Entered");
 
-        List<HashMap<String, String>> nearbyPlacesList = null;
+        nearbyPlacesList = null;
 
         DataParser dataParser = new DataParser();
 
@@ -114,6 +116,8 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
             final String placeName = googlePlace.get("place_name");
 
             final String vicinity = googlePlace.get("vicinity");
+
+            MapsActivity.singleton.AddToList(placeName + ", " + vicinity);
 
             LatLng latLng = new LatLng(lat, lng);
 
